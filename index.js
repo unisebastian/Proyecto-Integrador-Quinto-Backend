@@ -1,8 +1,14 @@
 const express = require('express');
 const app = express();
 const connection = require('./conexion');
+const imagenArbolRouter = require('./mostrar_imagen');
+app.use('/', imagenArbolRouter);
 
 app.use(express.json());
+
+// 👇 habilita CORS si vas a consumir desde Angular
+const cors = require('cors');
+app.use(cors());
 
 // Ruta de prueba
 app.get('/usuarios', (req, res) => {
@@ -14,6 +20,9 @@ app.get('/usuarios', (req, res) => {
     res.json(results);
   });
 });
+
+// 👇 Ruta para imágenes
+app.use('/', imagenArbolRouter); // esto activa /imagen_arbol/:id
 
 // Servidor
 const PORT = process.env.PORT || 3000;
