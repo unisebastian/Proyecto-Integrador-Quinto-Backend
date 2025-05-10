@@ -13,7 +13,7 @@ router.get('/imagen_arbol/:id', (req, res) => {
     }
 
     const imagenBuffer = results[0].imagen_arbol;
-    res.set('Content-Type', 'image/webp'); // Ajusta según el tipo real de la imagen
+    res.set('Content-Type', 'image/jpg'); // Ajusta según el tipo real de la imagen
     res.send(imagenBuffer);
   });
 });
