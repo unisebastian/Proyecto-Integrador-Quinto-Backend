@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const connection = require('./conexion');
 const imagenArbolRouter = require('./mostrar_imagen');
-app.use('/', imagenArbolRouter);
 
 app.use(express.json());
 
@@ -22,7 +21,7 @@ app.get('/usuarios', (req, res) => {
 });
 
 // 👇 Ruta para imágenes
-app.use('/', imagenArbolRouter); // esto activa /imagen_arbol/:id
+app.use('/api', imagenArbolRouter); // esto activa /imagen_arbol/:id
 
 // Servidor
 const PORT = process.env.PORT || 3000;
