@@ -3,21 +3,38 @@ const path = require('path');
 const connection = require('./conexion');
 
 // Ruta de la imagen
-const rutaImagen = path.join(__dirname, 'Gualanday.jpg');
-
-// Leer la imagen como buffer
+const rutaImagen = path.join(__dirname, 'guayacan.jpg');
 const imagenBuffer = fs.readFileSync(rutaImagen);
+const nombreEspecie = 'Guayacán';
 
-// Datos para insertar
-const nombre = 'Gualanday';
-const sql = 'INSERT INTO imagen_arbol (nombre, imagen_arbol) VALUES (?, ?)';
-const valores = [nombre, imagenBuffer];
+// 1. Buscar id_especie
+const buscarIdSql = 'SELECT id_especie FROM especie WHERE nombre_comun = ?';
 
-connection.query(sql, valores, (err, result) => {
+connection.query(buscarIdSql, [nombreEspecie], (err, results) => {
   if (err) {
-    console.error('❌ Error al insertar:', err);
-  } else {
-    console.log('✅ Insertado con ID:', result.insertId);
+    console.error('❌ Error al buscar id_especie:', err);
+    connection.end();
+    return;
   }
-  connection.end();
+
+  if (results.length === 0) {
+    console.error('⚠️ No se encontró la especie:', nombreEspecie);
+    connection.end();
+    return;
+  }
+
+  const idEspecie = results[0].id_especie;
+
+  // 2. Insertar en imagen_especie
+  const insertarSql = 'INSERT INTO imagen_especie (id_especie, nombre, imagen_arbol) VALUES (?, ?, ?)';
+  const valores = [idEspecie, nombreEspecie, imagenBuffer];
+
+  connection.query(insertarSql, valores, (err, result) => {
+    if (err) {
+      console.error('❌ Error al insertar:', err);
+    } else {
+      console.log('✅ Insertado con ID:', result.insertId);
+    }
+    connection.end();
+  });
 });
