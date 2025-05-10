@@ -3,7 +3,7 @@ const path = require('path');
 const connection = require('./conexion');
 
 // Ruta de la imagen
-const rutaImagen = path.join(__dirname, 'gualanday.jpg');
+const rutaImagen = path.join(__dirname, 'Gualanday.jpg');
 
 // Leer la imagen como buffer
 const imagenBuffer = fs.readFileSync(rutaImagen);
