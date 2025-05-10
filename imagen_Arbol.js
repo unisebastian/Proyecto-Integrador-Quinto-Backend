@@ -3,13 +3,13 @@ const path = require('path');
 const connection = require('./conexion');
 
 // Ruta de la imagen
-const rutaImagen = path.join(__dirname, 'guayacan.jpg');
+const rutaImagen = path.join(__dirname, 'gualanday.jpg');
 
 // Leer la imagen como buffer
 const imagenBuffer = fs.readFileSync(rutaImagen);
 
 // Datos para insertar
-const nombre = 'Guayacán';
+const nombre = 'Gualanday';
 const sql = 'INSERT INTO imagen_arbol (nombre, imagen_arbol) VALUES (?, ?)';
 const valores = [nombre, imagenBuffer];
 
