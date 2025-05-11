@@ -1,7 +1,7 @@
 const mysql = require('mysql2');
 
 const connection = mysql.createConnection({
-  host: 'maglev.proxy.rlwy.net',
+  host: 'mysql.railway.internal',
   port: 18996,
   user: 'root',
   password: 'nNhncEkethFlAcsOzEUgSzjwockBhwnh',
