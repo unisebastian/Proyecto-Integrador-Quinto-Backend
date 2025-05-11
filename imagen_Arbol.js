@@ -3,9 +3,9 @@ const path = require('path');
 const connection = require('./conexion');
 
 // Ruta de la imagen
-const rutaImagen = path.join(__dirname, 'gualanday.jpg');
+const rutaImagen = path.join(__dirname, 'arbol-roble-768x512.webp');
 const imagenBuffer = fs.readFileSync(rutaImagen);
-const nombreEspecie = 'Gualanday';
+const nombreEspecie = 'Roble';
 
 // 1. Buscar id_especie
 const buscarIdSql = 'SELECT id_especie FROM especie WHERE nombre_comun = ?';
