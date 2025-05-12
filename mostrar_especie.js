@@ -11,18 +11,20 @@ router.get('/mostrar_especie', (req, res) => {
       e.familia AS familia,
       e.uso AS uso,
       c.nombre AS region
-    FROM especie e JOIN especie_subparcela es ON e.id_especie = es.id_especie
+    FROM especie e 
+    JOIN especie_subparcela es ON e.id_especie = es.id_especie
     JOIN subparcela s ON s.id_subparcela = es.id_subparcela
     JOIN conglomerado c ON c.id_conglomerado = s.id_conglomerado
   `;
 
   connection.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al obtener las especies' });
-    }
+  if (err) {
+    console.error('Error de consulta:', err);  // Esto te dará más detalles sobre el error
+    return res.status(500).json({ error: err.message });  // Esto mostrará el error real
+  }
 
-    res.json(results);
-  });
+  res.json(results);
+});
 });
 
 
