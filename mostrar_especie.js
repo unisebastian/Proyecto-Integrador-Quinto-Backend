@@ -10,12 +10,10 @@ router.get('/mostrar_especie', (req, res) => {
       e.nombre_cientifico AS nombre_cientifico,
       e.familia AS familia,
       e.uso AS uso,
-      r.nombre AS region
-    FROM especie_subparcela es
-    JOIN especie e ON es.id_especie = e.id_especie
-    JOIN subparcela s ON es.id_subparcela = s.id_subparcela
-    JOIN conglomerado c ON s.id_conglomerado = c.id_conglomerado
-    JOIN region r ON c.id_region = r.id_region
+      c.nombre AS region
+    FROM especie e JOIN especie_subparcela es ON e.id_especie = es.id_especie
+    JOIN subparcela s ON s.id_subparcela = es.id_subparcela
+    JOIN conglomerado c ON c.id_conglomerado = s.id_conglomerado
   `;
 
   connection.query(sql, (err, results) => {
