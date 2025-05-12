@@ -3,7 +3,7 @@ const connection = require('./conexion');
 const router = express.Router();
 
 // GET /imagen_arbol/:id
-router.get('/imagen_especie/:id', (req, res) => {
+router.get('/imagen_especie/:nombre_comun', (req, res) => {
   const id = req.params.id;
   const sql = 'SELECT imagen_arbol FROM imagen_especie WHERE nombre = ?';
 
