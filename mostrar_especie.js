@@ -9,7 +9,7 @@ router.get('/mostrar_especie', (req, res) => {
     e.nombre_comun AS nombre_comun,
     e.nombre_cientifico AS nombre_cientifico,
     e.familia AS familia,
-    e.uso AS uso
+    e.uso AS uso,
   GROUP_CONCAT(DISTINCT r.nombre ORDER BY r.nombre SEPARATOR ', ') AS region
   FROM especie e 
   JOIN especie_subparcela es ON e.id_especie = es.id_especie
