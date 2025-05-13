@@ -1,7 +1,7 @@
 const connection = require('./conexion'); // Usa tu archivo de conexión
 
 const sql = 'INSERT INTO brigadistas_ideam (nombre, correo, direccion, telefono, rol) VALUES (?, ?, ?, ?, ?)';
-const valores = ['Angel Avendaño', 'angel@example.com', 'Calle 55 # 34', '31245789023', 'investigador'];
+const valores = ['Angel Avendaño', 'angel@example.com', 'Calle 55 # 34', '31245789003', 'investigador'];
 
 connection.query(sql, valores, (err, result) => {
   if (err) {
