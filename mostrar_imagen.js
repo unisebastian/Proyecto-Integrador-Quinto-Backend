@@ -1,5 +1,5 @@
 const express = require('express');
-const connection = require('./conexion');
+const connection = require('./connection/conexion.js');
 const router = express.Router();
 
 // GET /imagen_arbol/:id

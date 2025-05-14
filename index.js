@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const connection = require('./conexion');
+const connection = require('./connection/conexion.js');
 const imagenArbolRouter = require('./mostrar_imagen');
 const mostrarEspecie = require('./mostrar_especie');
 

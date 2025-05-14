@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const connection = require('./conexion');
+const connection = require('./connection/conexion.js');
 
 // Ruta de la imagen
 const rutaImagen = path.join(__dirname, 'arbol-roble-768x512.webp');
