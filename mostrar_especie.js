@@ -4,13 +4,13 @@ const router = express.Router();
 
 // GET /mostrar_especie
 router.get('/mostrar_especie', (req, res) => {
-  const sql = `
+    const sql = `
   SELECT 
     e.nombre_comun AS nombre_comun,
     e.nombre_cientifico AS nombre_cientifico,
     e.familia AS familia,
     e.uso AS uso,
-  GROUP_CONCAT(DISTINCT r.nombre ORDER BY r.nombre SEPARATOR ', ') AS region
+    GROUP_CONCAT(DISTINCT r.nombre ORDER BY r.nombre SEPARATOR ', ') AS region
   FROM especie e 
   JOIN arbol a ON a.id_especie = e.id_especie
   JOIN subparcela s ON s.id_subparcela = a.id_subparcela
