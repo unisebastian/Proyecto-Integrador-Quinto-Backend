@@ -18,7 +18,6 @@ router.get('/mostrar_especie', (req, res) => {
   JOIN region r ON r.id_region = c.id_region
   GROUP BY e.nombre_comun, e.nombre_cientifico, e.familia, e.uso;
   `;
-
   connection.query(sql, (err, results) => {
   if (err) {
     console.error('Error de consulta:', err);  // Esto te dará más detalles sobre el error
