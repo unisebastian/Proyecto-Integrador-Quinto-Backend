@@ -31,6 +31,7 @@
 // module.exports = router;
 
 
+
 const express = require('express');
 const router = express.Router();
 const pool = require('./conexion.js'); // Tu conexión a PostgreSQL
