@@ -38,7 +38,7 @@ const pool = require('./conexion.js'); // Tu conexión a PostgreSQL
 // Ruta para obtener especies
 router.get('/mostrar_especie', async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT * FROM especie');
+    const { rows } = await pool.query('SELECT nombre_comun, nombre_cientifico, familia, uso FROM especie');
     res.json(rows);
   } catch (err) {
     console.error('Error al consultar:', err);
