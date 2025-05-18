@@ -1,5 +1,5 @@
 const express = require('express');
-const pool = require('.BD/conexion.js'); // tu pool de PostgreSQL
+const pool = require('../BD/conexion.js'); // ✅ si estás en la misma carpeta
 const router = express.Router();
 
 // GET /imagen_especie/:nombre_comun
