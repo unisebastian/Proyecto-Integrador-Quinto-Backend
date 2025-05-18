@@ -13,7 +13,17 @@
   "type": "commonjs",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "mysql2": "^3.14.1"
-  }
+    "mysql2": "^3.14.1",
+    "pg": "^8.16.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unisebastian/Proyecto-Integrador-Quinto-Backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/unisebastian/Proyecto-Integrador-Quinto-Backend/issues"
+  },
+  "homepage": "https://github.com/unisebastian/Proyecto-Integrador-Quinto-Backend#readme"
 }

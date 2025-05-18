@@ -1,19 +1,20 @@
-const mysql = require('mysql2');
+require('dotenv').config(); // Cargar el archivo .env
 
-const connection = mysql.createConnection({
-  host: 'mysql.railway.internal',
-  port: 3306,
-  user: 'root',
-  password: 'nNhncEkethFlAcsOzEUgSzjwockBhwnh',
-  database: 'railway'
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
-connection.connect((err) => {
+pool.connect((err, client, release) => {
   if (err) {
-    console.error('Error al conectar a la BD:', err);
-    return;
+    return console.error('❌ Error al conectar con PostgreSQL:', err.stack);
   }
-  console.log('✅ Conectado exitosamente a Railway con mysql2');
+  console.log('✅ Conectado exitosamente a PostgreSQL (Neon)');
+  release();
 });
 
-module.exports = connection;
+module.exports = pool;

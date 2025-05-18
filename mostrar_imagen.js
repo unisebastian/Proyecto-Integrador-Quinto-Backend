@@ -1,22 +1,25 @@
 const express = require('express');
-const connection = require('./BD/conexion.js');
+const pool = require('./conexion.js'); // tu pool de PostgreSQL
 const router = express.Router();
 
-// GET /imagen_arbol/:id
-router.get('/imagen_especie/:nombre_comun', (req, res) => {
+// GET /imagen_especie/:nombre_comun
+router.get('/imagen_especie/:nombre_comun', async (req, res) => {
   const nombre_comun = req.params.nombre_comun;
-  const sql = 'SELECT imagen_arbol FROM imagen_especie WHERE nombre = ?';
+  const sql = 'SELECT imagen_especie FROM imagen_especie WHERE nombre = $1';
 
-  connection.query(sql, [nombre_comun], (err, results) => {
-    if (err || results.length === 0) {
+  try {
+    const { rows } = await pool.query(sql, [nombre_comun]);
+    if (rows.length === 0) {
       return res.status(404).send('Imagen no encontrada');
     }
 
-    const imagenBuffer = results[0].imagen_arbol;
-    res.set('Content-Type', 'image/jpg'); // Ajusta según el tipo real de la imagen
+    const imagenBuffer = rows[0].imagen_especie;
+    res.set('Content-Type', 'image/webp'); // Cambia al tipo correcto de la imagen si es necesario
     res.send(imagenBuffer);
-  });
+  } catch (err) {
+    console.error('Error al obtener imagen:', err);
+    res.status(500).send('Error en el servidor');
+  }
 });
-
 
 module.exports = router;
