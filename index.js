@@ -1,9 +1,7 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
-const connection = require('./BD/conexion.js');
-const imagenArbolRouter = require('./mostrar_imagen');
-const mostrarEspecie = require('./mostrar_especie');
-const mostrarUsuarios = require('./usuarios');
+const port = process.env.PORT || 3000;
 
 
 app.use(express.json());
@@ -23,6 +21,14 @@ app.use(cors());
 //   });
 // });
 
+const usuarioRoutes = require('./mostrar_imagen.js');
+
+const usuarioRoutes = require('./mostrar_especie.js');
+
+
+
+// Montar las rutas con prefijo `/api`
+app.use('/api', usuarioRoutes);
 
 app.use('/api', mostrarUsuarios);
 
@@ -33,7 +39,4 @@ app.use('/api', imagenArbolRouter); // esto activa /imagen_arbol/:id
 app.use('/api', mostrarEspecie);
 
 // Servidor
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-});
+
