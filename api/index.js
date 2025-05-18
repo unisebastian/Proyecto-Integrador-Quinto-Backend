@@ -12,5 +12,4 @@ app.use(express.json());
 app.use('/api', mostrarEspecie);
 app.use('/api', mostrarImagen);
 
-module.exports = app;
-module.exports.handler = serverless(app); // 👈 necesario para Vercel
+module.exports = serverless(app); // ✅ Este es el único export necesario para Vercel
