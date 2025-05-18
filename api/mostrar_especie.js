@@ -1,5 +1,5 @@
 const express = require('express');
-const connection = require('./BD/conexion.js');
+const connection = require('../BD/conexion.js');
 const router = express.Router();
 
 // GET /mostrar_especie
