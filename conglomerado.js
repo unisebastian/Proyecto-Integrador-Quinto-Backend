@@ -6,7 +6,12 @@ const pool = require('./conexion.js'); // Tu conexión a PostgreSQL
 router.get('/mostrar_conglomerado', async (req, res) => {
   try {
     const query = `
-      SELECT identificador AS identificador, fecha_creacion AS fecha_creacion, ARRAY[coordenadas] AS coordenadas, FROM conglomerado
+      SELECT 
+        identificador,
+        fecha_creacion,
+        string_to_array(coordenadas, ',')::float8[] AS coordenadas
+    FROM conglomerado;
+
     `;
 
     const { rows } = await pool.query(query);
