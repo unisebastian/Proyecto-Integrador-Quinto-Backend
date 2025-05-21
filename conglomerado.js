@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('./conexion.js'); // Tu conexión a PostgreSQL
 
-// Ruta actualizada para obtener especies con región agregada
+// Ruta actualizada para obtener conglomerados con coordenadas como array y fecha formateada
 router.get('/mostrar_conglomerado', async (req, res) => {
   try {
     const query = `
@@ -10,8 +10,7 @@ router.get('/mostrar_conglomerado', async (req, res) => {
         identificador,
         fecha_creacion::DATE AS fecha_creacion,
         string_to_array(coordenadas, ',')::float8[] AS coordenadas
-    FROM conglomerado;
-
+      FROM conglomerado
     `;
 
     const { rows } = await pool.query(query);
