@@ -4,12 +4,12 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// // ✅ Agrega CORS antes que cualquier middleware o rutas
-// app.use(cors({
-//   origin: 'https://proyecto-integrador-quinto-frontend-ten.vercel.app', // tu frontend en Vercel
-//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//   credentials: true
-// }));
+// ✅ Agrega CORS antes que cualquier middleware o rutas
+app.use(cors({
+  origin: 'https://proyecto-integrador-quinto-frontend-ten.vercel.app', // tu frontend en Vercel
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 
 // Middleware para interpretar JSON
 app.use(express.json());
