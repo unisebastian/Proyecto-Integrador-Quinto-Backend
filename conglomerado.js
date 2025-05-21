@@ -8,7 +8,7 @@ router.get('/mostrar_conglomerado', async (req, res) => {
     const query = `
       SELECT 
         identificador,
-        fecha_creacion::DATE AS fecha_creacion,
+        TO_CHAR(fecha_creacion, 'YYYY-MM-DD') AS fecha_creacion,
         string_to_array(coordenadas, ',')::float8[] AS coordenadas
       FROM conglomerado
     `;
