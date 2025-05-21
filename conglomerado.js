@@ -9,7 +9,7 @@ router.get('/mostrar_conglomerado', async (req, res) => {
         c.identificador,
         TO_CHAR(c.fecha_creacion, 'YYYY-MM-DD') AS fecha_creacion,
         r.nombre AS region,
-        m.nombre AS nombre,
+        m.nombre AS municipio,
         string_to_array(c.coordenadas, ',')::float8[] AS coordenadas,
         STRING_AGG(DISTINCT e.nombre_comun, ', ' ORDER BY e.nombre_comun) AS especie
       FROM conglomerado c
