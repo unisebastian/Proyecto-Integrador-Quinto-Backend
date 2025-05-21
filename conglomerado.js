@@ -11,7 +11,7 @@ router.get('/mostrar_conglomerado', async (req, res) => {
         r.nombre AS region,
         m.nombre AS municipio,
         string_to_array(c.coordenadas, ',')::float8[] AS coordenadas,
-        STRING_AGG(DISTINCT e.nombre_comun, ', ' ORDER BY e.nombre_comun) AS especie
+        STRING_AGG(DISTINCT e.nombre_comun, ', ' ORDER BY e.nombre_comun) AS especies
       FROM conglomerado c
       JOIN region r ON r.id_region = c.id_region
       JOIN municipio m ON m.id_municipio = c.id_municipio
