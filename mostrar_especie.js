@@ -10,12 +10,15 @@ router.get('/mostrar_especie', async (req, res) => {
         e.nombre_cientifico AS nombre_cientifico,
         e.familia AS familia,
         e.uso AS uso,
-        ARRAY_AGG(DISTINCT r.nombre ORDER BY r.nombre) AS region
+        COALESCE(
+          ARRAY_AGG(DISTINCT r.nombre ORDER BY r.nombre) FILTER (WHERE r.nombre IS NOT NULL),
+          ARRAY['Sin región']
+        ) AS region
       FROM especie e
-      JOIN arbol a ON a.id_especie = e.id_especie
-      JOIN subparcela s ON s.id_subparcela = a.id_subparcela
-      JOIN conglomerado c ON c.id_conglomerado = s.id_conglomerado
-      JOIN region r ON r.id_region = c.id_region
+      LEFT JOIN arbol a ON a.id_especie = e.id_especie
+      LEFT JOIN subparcela s ON s.id_subparcela = a.id_subparcela
+      LEFT JOIN conglomerado c ON c.id_conglomerado = s.id_conglomerado
+      LEFT JOIN region r ON r.id_region = c.id_region
       GROUP BY e.nombre_comun, e.nombre_cientifico, e.familia, e.uso
     `;
 
