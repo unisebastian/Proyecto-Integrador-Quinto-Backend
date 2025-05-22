@@ -30,11 +30,15 @@ app.use(express.json());
 const mostrarImagenRoutes = require('./mostrar_imagen.js');
 const mostrarEspecieRoutes = require('./mostrar_especie.js');
 const mostrarConglomeradoRoutes = require('./conglomerado.js');
+const brigadistasRoutes = require('./brigadistas.js');
+
+
 
 // 🔀 Montar rutas con prefijo '/api'
 app.use('/api/', mostrarImagenRoutes);
 app.use('/api/', mostrarEspecieRoutes);
 app.use('/api/', mostrarConglomeradoRoutes);
+app.use('/api/', brigadistasRoutes);
 
 // 🚀 Levantar el servidor
 app.listen(port, () => {
