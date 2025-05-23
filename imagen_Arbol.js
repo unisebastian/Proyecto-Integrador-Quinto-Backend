@@ -2,9 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const pool = require('./conexion.js'); // Pool de pg
 
-const rutaImagen = path.join(__dirname, 'arbol-roble-768x512.webp');
+const rutaImagen = path.join(__dirname, 'Ébano.jpeg');
 const imagenBuffer = fs.readFileSync(rutaImagen);
-const nombreEspecie = 'Roble';
+const nombreEspecie = 'Ébano';
 
 (async () => {
   try {
