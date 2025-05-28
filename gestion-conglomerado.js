@@ -89,7 +89,7 @@ router.post('/gestion-conglomerado', async (req, res) => {
 
 
 // ✅ PUT - Editar conglomerado
-router.put('/gestion-conglomerado/:id', async (req, res) => {
+router.put('/gestion-conglomerado/:id_conglomerado', async (req, res) => {
   const { id } = req.params;
   const { identificador, fecha_establecimiento, fecha_creacion, id_region, id_municipio, coordenadas} = req.body;
   try {
