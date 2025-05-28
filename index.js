@@ -30,7 +30,7 @@ app.use(express.json());
 const mostrarImagenRoutes = require('./mostrar_imagen.js');
 const mostrarEspecieRoutes = require('./mostrar_especie.js');
 const mostrarConglomeradoRoutes = require('./conglomerado.js');
-const brigadistasRoutes = require('./brigadistas.js');
+const brigadistasRoutes = require('./gestion-brigadistas.js');
 
 
 
