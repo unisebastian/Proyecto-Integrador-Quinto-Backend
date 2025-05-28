@@ -3,11 +3,38 @@ const router = express.Router();
 const pool = require('./conexion.js');
 
 
-// ✅ GET - Listar todos
+// GET - Listar todos
 router.get('/gestion-conglomerado', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM conglomerado ORDER BY id_conglomerado ASC');
-    res.json(result.rows);
+    const query = `
+      SELECT 
+        c.id_conglomerado,
+        c.identificador,
+        c.fecha_creacion,
+        c.fecha_establecimiento,
+        r.nombre AS nombre_region,
+        m.nombre AS nombre_municipio,
+        string_to_array(c.coordenadas, ',')::float8[] AS coordenadas
+      FROM conglomerado c
+      JOIN region r ON r.id_region = c.id_region
+      JOIN municipio m ON m.id_municipio = c.id_municipio
+    `;
+
+    const result = await pool.query(query);
+    
+    // Convertir fechas a formato ISO para que el cliente las interprete como Date
+    const conglomerados = result.rows.map(row => ({
+      id_conglomerado: row.id_conglomerado,
+      identificador: row.identificador,
+      fecha_creacion: row.fecha_creacion,        // Esto ya es Date en JS si configuras bien pg
+      fecha_establecimiento: row.fecha_establecimiento,
+      nombre_region: row.nombre_region,
+      nombre_municipio: row.nombre_municipio,
+      coordenadas: row.coordenadas
+    }));
+
+    res.json(conglomerados);
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
