@@ -31,7 +31,7 @@ const mostrarImagenRoutes = require('./mostrar_imagen.js');
 const mostrarEspecieRoutes = require('./mostrar_especie.js');
 const mostrarConglomeradoRoutes = require('./conglomerado.js');
 const brigadistasRoutes = require('./gestion-brigadistas.js');
-
+const conglomeradoRoutes = require('./gestion-conglomerado.js');
 
 
 // 🔀 Montar rutas con prefijo '/api'
@@ -39,6 +39,7 @@ app.use('/api/', mostrarImagenRoutes);
 app.use('/api/', mostrarEspecieRoutes);
 app.use('/api/', mostrarConglomeradoRoutes);
 app.use('/api/', brigadistasRoutes);
+app.use('/api/', conglomeradoRoutes);
 
 // 🚀 Levantar el servidor
 app.listen(port, () => {
