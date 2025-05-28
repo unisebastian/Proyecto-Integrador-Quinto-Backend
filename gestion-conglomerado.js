@@ -109,18 +109,9 @@ router.put('/gestion-conglomerado/:id', async (req, res) => {
 router.delete('/gestion-conglomerado/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await pool.query(
-      'DELETE FROM conglomerado WHERE id_conglomerado = $1',
-      [id]
-    );
-
-    if (result.rowCount === 0) {
-      return res.status(404).json({ error: 'Conglomerado no encontrado' });
-    }
-
-    res.status(204).send(); // Éxito
+    await pool.query('DELETE FROM conglomerado WHERE id_conglomerado = $1', [id]);
+    res.status(204).send(); // No content
   } catch (err) {
-    console.error('Error al eliminar conglomerado:', err); // <-- LOG para ver el error
     res.status(500).json({ error: err.message });
   }
 });
