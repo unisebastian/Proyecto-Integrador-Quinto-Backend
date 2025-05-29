@@ -114,8 +114,34 @@ router.delete('/gestion-conglomerado/:id', async (req, res) => {
 router.get('/gestion-conglomerado/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await pool.query('SELECT * FROM conglomerado WHERE id_conglomerado = $1', [id]);
-    res.json(result.rows[0]);
+    const query = `
+      SELECT 
+        c.id_conglomerado,
+        c.identificador,
+        c.fecha_creacion,
+        c.fecha_establecimiento,
+        r.nombre AS nombre_region,
+        m.nombre AS nombre_municipio,
+        c.coordenadas AS coordenadas,
+        d.nombre AS departamento,
+        m.id_municipio AS id_municipio
+      FROM conglomerado c
+      JOIN region r ON r.id_region = c.id_region
+      JOIN municipio m ON m.id_municipio = c.id_municipio
+      JOIN departamento d ON d.id_departamento = m.id_departamento  WHERE id_conglomerado = $1
+    `;
+    const result = await pool.query(query, [id]);
+    const conglomerados = result.rows.map(row => ({
+      id_conglomerado: row.id_conglomerado,
+      identificador: row.identificador,
+      fecha_creacion: row.fecha_creacion,        // Esto ya es Date en JS si configuras bien pg
+      fecha_establecimiento: row.fecha_establecimiento,
+      nombre_region: row.nombre_region,
+      nombre_municipio: {"id": row.id_municipio, "nombre":row.nombre_municipio, "departamento": row.departamento},
+      coordenadas: row.coordenadas
+    }));
+
+    res.json(conglomerados);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
