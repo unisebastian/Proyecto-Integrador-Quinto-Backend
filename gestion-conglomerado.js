@@ -49,22 +49,12 @@ router.post('/gestion-conglomerado', async (req, res) => {
     identificador,
     fecha_establecimiento,
     fecha_creacion,
-    nombre_region,
+    id_region,
     id_municipio,
     coordenadas
   } = req.body;
 
   try {
-    // Buscar id_region por nombre
-    const regionResult = await pool.query(
-      'SELECT id_region FROM region WHERE nombre = $1',
-      [nombre_region]
-    );
-    if (regionResult.rows.length === 0) {
-      return res.status(400).json({ error: 'Región no encontrada' });
-    }
-    const id_region = regionResult.rows[0].id_region;
-
     // Insertar el conglomerado
     const insertResult = await pool.query(
       `INSERT INTO conglomerado 
