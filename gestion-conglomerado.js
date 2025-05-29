@@ -67,7 +67,7 @@ router.post('/gestion-conglomerado', async (req, res) => {
       `INSERT INTO conglomerado 
         (identificador, fecha_establecimiento, fecha_creacion, id_region, id_municipio, coordenadas) 
        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-      [identificador, fecha_establecimiento, fecha_creacion, id_region, id_municipio, coordenadas.join(',')]
+      [identificador, fecha_establecimiento, fecha_creacion, id_region, id_municipio, coordenadas]
     );
 
     res.status(201).json(insertResult.rows[0]);
