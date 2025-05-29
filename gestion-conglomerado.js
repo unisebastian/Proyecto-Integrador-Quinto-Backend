@@ -141,7 +141,7 @@ router.get('/gestion-conglomerado/:id', async (req, res) => {
       coordenadas: row.coordenadas
     }));
 
-    res.json(conglomerados);
+    res.json(conglomerados[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
