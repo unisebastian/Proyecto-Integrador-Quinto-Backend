@@ -13,11 +13,13 @@ router.get('/gestion-conglomerado', async (req, res) => {
         c.fecha_creacion,
         c.fecha_establecimiento,
         r.nombre AS nombre_region,
-        m.nombre AS nombre_municipio,
+        m.nombre || ', ' || d.nombre AS nombre_municipio,
         string_to_array(c.coordenadas, ',')::float8[] AS coordenadas
       FROM conglomerado c
       JOIN region r ON r.id_region = c.id_region
       JOIN municipio m ON m.id_municipio = c.id_municipio
+      JOIN departamento d ON d.id_departamento = m.id_departamento
+      ORDER BY m.nombre;
     `;
 
     const result = await pool.query(query);
