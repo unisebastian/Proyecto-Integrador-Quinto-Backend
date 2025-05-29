@@ -14,10 +14,13 @@ router.get('/gestion-conglomerado', async (req, res) => {
         c.fecha_establecimiento,
         r.nombre AS nombre_region,
         m.nombre AS nombre_municipio,
-        c.coordenadas AS coordenadas
+        c.coordenadas AS coordenadas,
+        d.nombre AS departamento,
+        m.id_municipio AS id_municipio
       FROM conglomerado c
       JOIN region r ON r.id_region = c.id_region
       JOIN municipio m ON m.id_municipio = c.id_municipio
+      JOIN departamento d ON d.id_departamento = m.id_departamento
     `;
 
     const result = await pool.query(query);
@@ -29,7 +32,7 @@ router.get('/gestion-conglomerado', async (req, res) => {
       fecha_creacion: row.fecha_creacion,        // Esto ya es Date en JS si configuras bien pg
       fecha_establecimiento: row.fecha_establecimiento,
       nombre_region: row.nombre_region,
-      nombre_municipio: row.nombre_municipio,
+      nombre_municipio: {"id": row.id_municipio, "nombre":row.nombre_municipio, "departamento": row.departamento},
       coordenadas: row.coordenadas
     }));
 
