@@ -47,7 +47,7 @@ router.post('/gestion-conglomerado', async (req, res) => {
     fecha_establecimiento,
     fecha_creacion,
     nombre_region,
-    nombre_municipio,
+    id_municipio,
     coordenadas
   } = req.body;
 
@@ -61,16 +61,6 @@ router.post('/gestion-conglomerado', async (req, res) => {
       return res.status(400).json({ error: 'Región no encontrada' });
     }
     const id_region = regionResult.rows[0].id_region;
-
-    // Buscar id_municipio por nombre
-    const municipioResult = await pool.query(
-      'SELECT id_municipio FROM municipio WHERE nombre = $1',
-      [nombre_municipio]
-    );
-    if (municipioResult.rows.length === 0) {
-      return res.status(400).json({ error: 'Municipio no encontrado' });
-    }
-    const id_municipio = municipioResult.rows[0].id_municipio;
 
     // Insertar el conglomerado
     const insertResult = await pool.query(
