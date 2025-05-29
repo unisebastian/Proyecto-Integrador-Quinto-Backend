@@ -82,48 +82,17 @@ router.post('/gestion-conglomerado', async (req, res) => {
 
 
 // ✅ PUT - Editar conglomerado
-router.put('/gestion-conglomerado/:id', async (req, res) => {
-  const { id } = req.params;
-  const {
-    identificador,
-    fecha_establecimiento,
-    fecha_creacion,
-    nombre_region,
-    nombre_municipio,
-    coordenadas
-  } = req.body;
-
+router.put('/gestion-conglomerado/:id_conglomerado', async (req, res) => {
+  const { id_conglomerado } = req.params;
+  const { identificador, fecha_establecimiento, fecha_creacion, id_region, id_municipio, coordenadas } = req.body;
   try {
-    // Buscar id_region por nombre_region
-    const regionResult = await pool.query(
-      'SELECT id_region FROM region WHERE nombre = $1',
-      [nombre_region]
-    );
-    if (regionResult.rows.length === 0) {
-      return res.status(400).json({ error: 'Región no encontrada' });
-    }
-    const id_region = regionResult.rows[0].id_region;
-
-    // Usar id del municipio directamente del objeto
-    const id_municipio = nombre_municipio.id;
-
     const result = await pool.query(
       `UPDATE conglomerado 
        SET identificador=$1, fecha_establecimiento=$2, fecha_creacion=$3, id_region=$4, id_municipio=$5, coordenadas=$6
        WHERE id_conglomerado=$7 RETURNING *`,
-      [
-        identificador,
-        fecha_establecimiento,
-        fecha_creacion,
-        id_region,
-        id_municipio,
-        coordenadas,
-        id
-      ]
+      [identificador, fecha_establecimiento, fecha_creacion, id_region, id_municipio, coordenadas, id_conglomerado]
     );
-
     res.json(result.rows[0]);
-
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
