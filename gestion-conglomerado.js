@@ -83,14 +83,14 @@ router.post('/gestion-conglomerado', async (req, res) => {
 
 // ✅ PUT - Editar conglomerado
 router.put('/gestion-conglomerado/:id_conglomerado', async (req, res) => {
-  const { id_conglomerado } = req.params;
-  const { identificador, fecha_establecimiento, fecha_creacion, id_region, id_municipio, coordenadas } = req.body;
+  const { id } = req.params;
+  const { identificador, fecha_establecimiento, fecha_creacion, id_region, id_municipio, coordenadas} = req.body;
   try {
     const result = await pool.query(
       `UPDATE conglomerado 
        SET identificador=$1, fecha_establecimiento=$2, fecha_creacion=$3, id_region=$4, id_municipio=$5, coordenadas=$6
        WHERE id_conglomerado=$7 RETURNING *`,
-      [identificador, fecha_establecimiento, fecha_creacion, id_region, id_municipio, coordenadas, id_conglomerado]
+      [ identificador, fecha_establecimiento, fecha_creacion, id_region, id_municipio, coordenadas, id ]
     );
     res.json(result.rows[0]);
   } catch (err) {
