@@ -92,6 +92,7 @@ router.put('/gestion-conglomerado/:id_conglomerado', async (req, res) => {
 router.delete('/gestion-conglomerado/:id', async (req, res) => {
   const { id } = req.params;
   try {
+    await pool.query('DELETE FROM subparcela WHERE id_conglomerado = $1', [id]);
     await pool.query('DELETE FROM conglomerado WHERE id_conglomerado = $1', [id]);
     res.status(204).send(); // No content
   } catch (err) {
