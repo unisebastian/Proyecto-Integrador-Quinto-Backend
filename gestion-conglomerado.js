@@ -7,20 +7,20 @@ const pool = require('./conexion.js');
 router.get('/gestion-conglomerado', async (req, res) => {
   try {
     const query = `
-      SELECT 
-        c.id_conglomerado,
-        c.identificador,
-        c.fecha_creacion,
-        c.fecha_establecimiento,
-        r.nombre AS nombre_region,
-        m.nombre AS nombre_municipio,
-        c.coordenadas AS coordenadas,
-        d.nombre AS departamento,
-        m.id_municipio AS id_municipio
-      FROM conglomerado c
-      JOIN region r ON r.id_region = c.id_region
-      JOIN municipio m ON m.id_municipio = c.id_municipio
-      JOIN departamento d ON d.id_departamento = m.id_departamento
+    SELECT 
+      c.id_conglomerado,
+      c.identificador,
+      TO_CHAR(c.fecha_creacion, 'YYYY-MM-DD') AS fecha_creacion,
+      TO_CHAR(c.fecha_establecimiento, 'YYYY-MM-DD') AS fecha_establecimiento,
+      r.nombre AS nombre_region,
+      m.nombre AS nombre_municipio,
+      c.coordenadas AS coordenadas,
+      d.nombre AS departamento,
+      m.id_municipio AS id_municipio
+    FROM conglomerado c
+    JOIN region r ON r.id_region = c.id_region
+    JOIN municipio m ON m.id_municipio = c.id_municipio
+    JOIN departamento d ON d.id_departamento = m.id_departamento;
     `;
 
     const result = await pool.query(query);
