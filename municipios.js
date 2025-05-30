@@ -5,7 +5,7 @@ const pool = require('./conexion.js');
 router.get('/mostrar_municipios', async (req, res) => {
   try {
     const query = `
-      SELECT commentMore actions
+      SELECT
         m.id_municipio,
         m.nombre AS nombre_municipio,
         d.nombre AS nombre_departamento
