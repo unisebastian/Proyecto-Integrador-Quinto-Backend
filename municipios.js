@@ -5,13 +5,14 @@ const pool = require('./conexion.js');
 router.get('/mostrar_municipios', async (req, res) => {
   try {
     const query = `
-      SELECT
-        id_municipio,
-        nombre AS nombre_municipio
-
-      FROM municipio
-      WHERE nombre IS NOT NULL
-      ORDER BY nombre;
+      SELECT commentMore actions
+        m.id_municipio,
+        m.nombre AS nombre_municipio,
+        d.nombre AS nombre_departamento
+      FROM municipio m
+      INNER JOIN departamento d ON m.id_departamento = d.id_departamento
+      WHERE m.nombre IS NOT NULL AND d.nombre IS NOT NULL
+      ORDER BY m.nombre;
     `;
 
     const { rows } = await pool.query(query);
