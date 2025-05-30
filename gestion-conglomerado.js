@@ -53,7 +53,7 @@ router.post('/gestion-conglomerado', async (req, res) => {
     id_municipio,
     coordenadas
   } = req.body;
-
+  console.log('POST /gestion-conglomerado', req.body); // 👈 agrega esto
   try {
     // Insertar el conglomerado
     const insertResult = await pool.query(
