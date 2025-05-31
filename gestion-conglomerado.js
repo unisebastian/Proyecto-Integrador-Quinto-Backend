@@ -53,45 +53,22 @@ router.post('/gestion-conglomerado', async (req, res) => {
     id_municipio,
     coordenadas
   } = req.body;
-
-  const client = await pool.connect();
+  console.log('POST /gestion-conglomerado', req.body); // 👈 agrega esto
   try {
-    await client.query('BEGIN');
-
     // Insertar el conglomerado
-    const insertCongloResult = await client.query(
+    const insertResult = await pool.query(
       `INSERT INTO conglomerado 
         (identificador, fecha_establecimiento, fecha_creacion, id_region, id_municipio, coordenadas) 
-       VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
       [identificador, fecha_establecimiento, fecha_creacion, id_region, id_municipio, coordenadas]
     );
 
-    const id_conglomerado = insertCongloResult.rows[0].id;
-
-    // Direcciones fijas para las subparcelas
-    const direcciones = ['Norte', 'Sur', 'Este', 'Oeste', 'Centro'];
-
-    // Insertar 5 subparcelas
-    for (let i = 0; i < direcciones.length; i++) {
-      await client.query(
-        `INSERT INTO subparcela (id_conglomerado, numero, direccion) 
-         VALUES ($1, $2, $3)`,
-        [id_conglomerado, i + 1, direcciones[i]]
-      );
-    }
-
-    await client.query('COMMIT');
-    res.status(201).json({ mensaje: 'Conglomerado y subparcelas creadas correctamente' });
+    res.status(201).json(insertResult.rows[0]);
 
   } catch (err) {
-    await client.query('ROLLBACK');
-    console.error('Error al crear conglomerado y subparcelas:', err);
     res.status(500).json({ error: err.message });
-  } finally {
-    client.release();
   }
 });
-
 
 
 // ✅ PUT - Editar conglomerado
