@@ -17,7 +17,7 @@ router.get('/conglomerado_subparcela', async (req, res) => {
     const result = await pool.query(query);
     
     // Convertir fechas a formato ISO para que el cliente las interprete como Date
-    const conglomerados = result.rows.map(row => ({
+    const conglomeradoSubparcelas = result.rows.map(row => ({
       id_conglomerado: row.id_conglomerado,
       identificador: row.identificador,
       subparcela: {"id_subparcela": row.id_subparcela, "numero_subparcela":row.numero_subparcela}
