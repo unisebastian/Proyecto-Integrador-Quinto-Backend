@@ -8,7 +8,7 @@ router.get('/conglomerado_subparcela', async (req, res) => {
       SELECT 
         c.id_conglomerado,
         c.identificador,
-        s.id_subparcela AS id_subparcela,
+        s.id_subparcela,
         s.numero AS numero_subparcela
       FROM conglomerado c
       JOIN subparcela s ON s.id_conglomerado = c.id_conglomerado;
@@ -16,14 +16,27 @@ router.get('/conglomerado_subparcela', async (req, res) => {
 
     const result = await pool.query(query);
 
-    const conglomerados = result.rows.map(row => ({
-      id_conglomerado: row.id_conglomerado,
-      identificador: row.identificador,
-      subparcela: {
+    // Agrupar subparcelas por conglomerado
+    const conglomeradoMap = new Map();
+
+    result.rows.forEach(row => {
+      const id = row.id_conglomerado;
+
+      if (!conglomeradoMap.has(id)) {
+        conglomeradoMap.set(id, {
+          id_conglomerado: id,
+          identificador: row.identificador,
+          subparcelas: []
+        });
+      }
+
+      conglomeradoMap.get(id).subparcelas.push({
         id_subparcela: row.id_subparcela,
         numero_subparcela: row.numero_subparcela
-      }
-    }));
+      });
+    });
+
+    const conglomerados = Array.from(conglomeradoMap.values());
 
     res.json(conglomerados);
 
