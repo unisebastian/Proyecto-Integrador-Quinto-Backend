@@ -20,7 +20,7 @@ router.get('/conglomerado_subparcela', async (req, res) => {
     const conglomerados = result.rows.map(row => ({
       id_conglomerado: row.id_conglomerado,
       identificador: row.identificador,
-      subparcela: {"id_subparcela": row.id_subparcela, "numero_subparcela":row.numero}
+      subparcela: {"id_subparcela": row.id_subparcela, "numero_subparcela":row.numero_subparcela}
     }));
 
     res.json(conglomeradoSubparcelas);
