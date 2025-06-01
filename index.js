@@ -33,6 +33,7 @@ const mostrarConglomeradoRoutes = require('./conglomerado.js');
 const brigadistasRoutes = require('./gestion-brigadistas.js');
 const conglomeradoRoutes = require('./gestion-conglomerado.js');
 const municipiosRoutes = require('./municipios.js');
+const conglomeradoSubparcelasRoutes = require('./gestion_arboles.js');
 
 // 🔀 Montar rutas con prefijo '/api'
 app.use('/api/', mostrarImagenRoutes);
@@ -41,6 +42,8 @@ app.use('/api/', mostrarConglomeradoRoutes);
 app.use('/api/', brigadistasRoutes);
 app.use('/api/', conglomeradoRoutes);
 app.use('/api/', municipiosRoutes);
+app.use('/api/', conglomeradoSubparcelasRoutes);
+
 
 // 🚀 Levantar el servidor
 app.listen(port, () => {
