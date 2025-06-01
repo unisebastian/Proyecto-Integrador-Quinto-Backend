@@ -5,27 +5,32 @@ const pool = require('./conexion.js');
 router.get('/conglomerado_subparcela', async (req, res) => {
   try {
     const query = `
-    SELECT 
-      c.id_conglomerado,
-      c.identificador,
-      s.id_subparcela AS id_subparcela,
-      s.numero AS numero_subparcela,
-    FROM conglomerado c
-    JOIN subparcela s ON s.id_conglomerado = c.id_conglomerado;
+      SELECT 
+        c.id_conglomerado,
+        c.identificador,
+        s.id_subparcela AS id_subparcela,
+        s.numero AS numero_subparcela
+      FROM conglomerado c
+      JOIN subparcela s ON s.id_conglomerado = c.id_conglomerado;
     `;
 
     const result = await pool.query(query);
-    
-    // Convertir fechas a formato ISO para que el cliente las interprete como Date
-    const conglomeradoSubparcelas = result.rows.map(row => ({
+
+    const conglomerados = result.rows.map(row => ({
       id_conglomerado: row.id_conglomerado,
       identificador: row.identificador,
-      subparcela: {"id_subparcela": row.id_subparcela, "numero_subparcela":row.numero_subparcela}
+      subparcela: {
+        id_subparcela: row.id_subparcela,
+        numero_subparcela: row.numero_subparcela
+      }
     }));
 
-    res.json(conglomeradoSubparcelas);
+    res.json(conglomerados);
 
   } catch (err) {
+    console.error('ERROR EN API:', err);
     res.status(500).json({ error: err.message });
   }
 });
+
+module.exports = router;
