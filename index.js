@@ -35,6 +35,7 @@ const conglomeradoRoutes = require('./gestion-conglomerado.js');
 const municipiosRoutes = require('./municipios.js');
 const conglomeradoSubparcelasRoutes = require('./gestion_arboles.js');
 const especieRoutes = require('./especie.js');
+const laboratorioRoutes = require('./laboratorio.js');
 
 // 🔀 Montar rutas con prefijo '/api'
 app.use('/api/', mostrarImagenRoutes);
@@ -45,7 +46,7 @@ app.use('/api/', conglomeradoRoutes);
 app.use('/api/', municipiosRoutes);
 app.use('/api/', conglomeradoSubparcelasRoutes);
 app.use('/api/', especieRoutes);
-
+app.use('/api/', laboratorioRoutes);
 
 
 // 🚀 Levantar el servidor
