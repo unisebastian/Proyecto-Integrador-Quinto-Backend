@@ -38,6 +38,7 @@ const especieRoutes = require('./especie.js');
 const laboratorioRoutes = require('./laboratorio.js');
 const agregarEspecieRoutes = require('./agregar_especie.js');
 const reporteRoutes = require('./reportes.js');
+const analisis_laboratorioRoutes = require('./analisis_laboratorio.js');
 
 // 🔀 Montar rutas con prefijo '/api'
 app.use('/api/', mostrarImagenRoutes);
@@ -51,6 +52,7 @@ app.use('/api/', especieRoutes);
 app.use('/api/', laboratorioRoutes);
 app.use('/api/', agregarEspecieRoutes);
 app.use('/api/', reporteRoutes);
+app.use('/api/', analisis_laboratorioRoutes);
 
 
 // 🚀 Levantar el servidor
