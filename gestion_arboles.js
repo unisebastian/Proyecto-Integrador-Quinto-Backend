@@ -67,11 +67,11 @@ router.post('/gestion_arbol', upload.single('imagen'), async (req, res) => {
   } = req.body;
 
   const imagenBuffer = req.file ? req.file.buffer : null;
-  const id_especie_val = id_especie ? parseInt(id_especie, 10) : null;
-
+  const id_especie_val = (id_especie === undefined || id_especie === null || id_especie === '') 
+    ? null 
+    : parseInt(id_especie, 10);
 
   try {
-    // Insertar árbol
     const resultArbol = await pool.query(
       `INSERT INTO arbol 
         (id_subparcela, id_especie, altura_mt, diametro_cm, observaciones, coordenadas) 
@@ -84,7 +84,6 @@ router.post('/gestion_arbol', upload.single('imagen'), async (req, res) => {
 
     let id_muestra = null;
 
-    // Insertar muestra si se enviaron datos
     if (identificador && tipo && fecha_recoleccion) {
       const resultMuestra = await pool.query(
         `INSERT INTO muestra (identificador, id_arbol, tipo, fecha_recoleccion)
@@ -95,7 +94,6 @@ router.post('/gestion_arbol', upload.single('imagen'), async (req, res) => {
 
       id_muestra = resultMuestra.rows[0].id_muestra;
 
-      // Insertar imagen si se envió archivo
       if (imagenBuffer) {
         await pool.query(
           `INSERT INTO imagen_muestra (id_muestra, imagen)
@@ -119,9 +117,6 @@ router.post('/gestion_arbol', upload.single('imagen'), async (req, res) => {
 });
 
 
-
-// ---------------------------------------------------------------------------------------------------------------------
-
 // Ruta para actualizar árbol, muestra y opcionalmente imagen
 router.put('/gestion_arbol/:id_arbol', upload.single('imagen'), async (req, res) => {
   const id_arbol = req.params.id_arbol;
@@ -139,6 +134,9 @@ router.put('/gestion_arbol/:id_arbol', upload.single('imagen'), async (req, res)
   } = req.body;
 
   const imagenBuffer = req.file ? req.file.buffer : null;
+  const id_especie_val = (id_especie === undefined || id_especie === null || id_especie === '') 
+    ? null 
+    : parseInt(id_especie, 10);
 
   try {
     // 1. Actualizar árbol
@@ -151,7 +149,7 @@ router.put('/gestion_arbol/:id_arbol', upload.single('imagen'), async (req, res)
            observaciones = $5,
            coordenadas = $6
        WHERE id_arbol = $7`,
-      [id_subparcela, id_especie, altura_mt, diametro_cm, observaciones, coordenadas, id_arbol]
+      [id_subparcela, id_especie_val, altura_mt, diametro_cm, observaciones, coordenadas, id_arbol]
     );
 
     // 2. Verificar si ya existe muestra para este árbol
@@ -161,7 +159,6 @@ router.put('/gestion_arbol/:id_arbol', upload.single('imagen'), async (req, res)
     );
 
     if (resultMuestra.rows.length > 0) {
-      // Muestra existente: actualizar
       const id_muestra = resultMuestra.rows[0].id_muestra;
 
       await pool.query(
@@ -173,22 +170,18 @@ router.put('/gestion_arbol/:id_arbol', upload.single('imagen'), async (req, res)
         [identificador, tipo, fecha_recoleccion, id_muestra]
       );
 
-      // 3. Si hay imagen, actualizar o insertar imagen_muestra
       if (imagenBuffer) {
-        // Verificar si ya hay imagen para esta muestra
         const resultImagen = await pool.query(
           `SELECT id_imagen FROM imagen_muestra WHERE id_muestra = $1`,
           [id_muestra]
         );
 
         if (resultImagen.rows.length > 0) {
-          // Actualizar imagen existente
           await pool.query(
             `UPDATE imagen_muestra SET imagen = $1 WHERE id_muestra = $2`,
             [imagenBuffer, id_muestra]
           );
         } else {
-          // Insertar nueva imagen
           await pool.query(
             `INSERT INTO imagen_muestra (id_muestra, imagen) VALUES ($1, $2)`,
             [id_muestra, imagenBuffer]
@@ -197,7 +190,6 @@ router.put('/gestion_arbol/:id_arbol', upload.single('imagen'), async (req, res)
       }
 
     } else {
-      // No hay muestra: si se envió info de muestra, insertar
       if (identificador && tipo && fecha_recoleccion) {
         const resultInsert = await pool.query(
           `INSERT INTO muestra (identificador, id_arbol, tipo, fecha_recoleccion)
@@ -224,7 +216,5 @@ router.put('/gestion_arbol/:id_arbol', upload.single('imagen'), async (req, res)
     res.status(500).json({ error: 'Error al actualizar los datos.' });
   }
 });
-
-
 
 module.exports = router;
