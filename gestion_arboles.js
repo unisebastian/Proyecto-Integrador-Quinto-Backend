@@ -67,6 +67,8 @@ router.post('/gestion_arbol', upload.single('imagen'), async (req, res) => {
   } = req.body;
 
   const imagenBuffer = req.file ? req.file.buffer : null;
+  const id_especie_val = id_especie ? parseInt(id_especie, 10) : null;
+
 
   try {
     // Insertar árbol
@@ -75,7 +77,7 @@ router.post('/gestion_arbol', upload.single('imagen'), async (req, res) => {
         (id_subparcela, id_especie, altura_mt, diametro_cm, observaciones, coordenadas) 
        VALUES ($1, $2, $3, $4, $5, $6) 
        RETURNING id_arbol`,
-      [id_subparcela, id_especie, altura_mt, diametro_cm, observaciones, coordenadas]
+      [id_subparcela, id_especie_val, altura_mt, diametro_cm, observaciones, coordenadas]
     );
 
     const id_arbol = resultArbol.rows[0].id_arbol;
@@ -115,6 +117,114 @@ router.post('/gestion_arbol', upload.single('imagen'), async (req, res) => {
     res.status(500).json({ error: 'Error al registrar los datos.' });
   }
 });
+
+
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+// Ruta para actualizar árbol, muestra y opcionalmente imagen
+router.put('/gestion_arbol/:id_arbol', upload.single('imagen'), async (req, res) => {
+  const id_arbol = req.params.id_arbol;
+
+  const {
+    id_subparcela,
+    id_especie,
+    altura_mt,
+    diametro_cm,
+    observaciones,
+    coordenadas,
+    identificador,
+    tipo,
+    fecha_recoleccion
+  } = req.body;
+
+  const imagenBuffer = req.file ? req.file.buffer : null;
+
+  try {
+    // 1. Actualizar árbol
+    await pool.query(
+      `UPDATE arbol
+       SET id_subparcela = $1,
+           id_especie = $2,
+           altura_mt = $3,
+           diametro_cm = $4,
+           observaciones = $5,
+           coordenadas = $6
+       WHERE id_arbol = $7`,
+      [id_subparcela, id_especie, altura_mt, diametro_cm, observaciones, coordenadas, id_arbol]
+    );
+
+    // 2. Verificar si ya existe muestra para este árbol
+    const resultMuestra = await pool.query(
+      `SELECT id_muestra FROM muestra WHERE id_arbol = $1`,
+      [id_arbol]
+    );
+
+    if (resultMuestra.rows.length > 0) {
+      // Muestra existente: actualizar
+      const id_muestra = resultMuestra.rows[0].id_muestra;
+
+      await pool.query(
+        `UPDATE muestra
+         SET identificador = $1,
+             tipo = $2,
+             fecha_recoleccion = $3
+         WHERE id_muestra = $4`,
+        [identificador, tipo, fecha_recoleccion, id_muestra]
+      );
+
+      // 3. Si hay imagen, actualizar o insertar imagen_muestra
+      if (imagenBuffer) {
+        // Verificar si ya hay imagen para esta muestra
+        const resultImagen = await pool.query(
+          `SELECT id_imagen FROM imagen_muestra WHERE id_muestra = $1`,
+          [id_muestra]
+        );
+
+        if (resultImagen.rows.length > 0) {
+          // Actualizar imagen existente
+          await pool.query(
+            `UPDATE imagen_muestra SET imagen = $1 WHERE id_muestra = $2`,
+            [imagenBuffer, id_muestra]
+          );
+        } else {
+          // Insertar nueva imagen
+          await pool.query(
+            `INSERT INTO imagen_muestra (id_muestra, imagen) VALUES ($1, $2)`,
+            [id_muestra, imagenBuffer]
+          );
+        }
+      }
+
+    } else {
+      // No hay muestra: si se envió info de muestra, insertar
+      if (identificador && tipo && fecha_recoleccion) {
+        const resultInsert = await pool.query(
+          `INSERT INTO muestra (identificador, id_arbol, tipo, fecha_recoleccion)
+           VALUES ($1, $2, $3, $4)
+           RETURNING id_muestra`,
+          [identificador, id_arbol, tipo, fecha_recoleccion]
+        );
+
+        const id_muestra = resultInsert.rows[0].id_muestra;
+
+        if (imagenBuffer) {
+          await pool.query(
+            `INSERT INTO imagen_muestra (id_muestra, imagen) VALUES ($1, $2)`,
+            [id_muestra, imagenBuffer]
+          );
+        }
+      }
+    }
+
+    res.json({ mensaje: 'Datos actualizados correctamente' });
+
+  } catch (err) {
+    console.error('Error al actualizar:', err.message);
+    res.status(500).json({ error: 'Error al actualizar los datos.' });
+  }
+});
+
 
 
 module.exports = router;
