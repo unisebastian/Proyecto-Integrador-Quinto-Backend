@@ -99,4 +99,7 @@ router.put('/laboratorio/:id_muestra/especie', async (req, res) => {
   }
 });
 
+
+
+
 module.exports = router;
