@@ -82,4 +82,35 @@ router.post('/brigada', async (req, res) => {
   }
 });
 
+
+// Ruta para obtener todas las brigadas con información detallada
+router.get('/obtener_brigada', async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+        b.id_brigada,
+        b.nombre AS nombre_brigada,
+        jefe.nombre AS nombre_jefe_brigada,
+        investigador.nombre AS nombre_investigador,
+        coinvestigador.nombre AS nombre_coinvestigador,
+        c.identificador AS identificador_conglomerado,
+        b.fecha_visita
+      FROM brigada b
+      JOIN brigadistas_ideam jefe ON b.id_jefe_brigada = jefe.id_usuario
+      JOIN brigadistas_ideam investigador ON b.id_investigador = investigador.id_usuario
+      JOIN brigadistas_ideam coinvestigador ON b.id_coinvestigador = coinvestigador.id_usuario
+      JOIN conglomerado c ON b.id_conglomerado = c.id_conglomerado
+      ORDER BY b.id_brigada DESC
+    `;
+
+    const { rows } = await pool.query(query);
+    res.json(rows);
+  } catch (error) {
+    console.error('Error al obtener brigadas:', error);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
+
+
 module.exports = router;
